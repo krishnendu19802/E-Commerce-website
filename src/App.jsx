@@ -8,6 +8,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Indvproduct from './Components/Indvproduct'
 // import '../src/App'
 import './App.css'
+import Cartpage from './Components/Cartpage'
 
 
 function App() {
@@ -20,7 +21,9 @@ function App() {
         <Navbar/>
         <Routes>
              <Route exact path="/" element={<Productlist/>}></Route>
-             <Route exact path="/product/productId" element={<Indvproduct/>}></Route>
+             <Route exact path="/product/:productId" element={<Indvproduct/>}></Route>
+             <Route exact path="/cartpage" element={<Cartpage/>}></Route>
+
              
         </Routes>
         

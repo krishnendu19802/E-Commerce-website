@@ -2,7 +2,7 @@ import axios from 'axios'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setlist } from '../Redux/Actions/Action'
-import { stars } from '../assets/Stars'
+import { stars } from '../assets/Icons'
 import { Link } from 'react-router-dom'
 // import { setlist } from '../Redux/Reducers/MainReducers'
 

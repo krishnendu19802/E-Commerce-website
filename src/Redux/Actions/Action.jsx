@@ -6,3 +6,24 @@ export const setlist=(list)=>{
         payload:list
     }
 }
+
+export const selectitem=(item)=>{
+    return {
+        type:ActionTypes.SELECT_ITEM,
+        payload:item
+    }
+}
+
+export const removeselectitem=()=>{
+    return {
+        type:ActionTypes.REMOVE_ITEM
+        
+    }
+}
+
+export const addcartitem=(item)=>{
+    return {
+        type:ActionTypes.ADD_CART,
+        payload:item
+    }
+}
