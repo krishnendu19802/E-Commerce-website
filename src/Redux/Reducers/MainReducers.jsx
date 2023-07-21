@@ -43,7 +43,14 @@ export const cart_items=(state=[],{type,payload})=>{
               }
            }
             break;
-    
+        case ActionTypes.REMOVE_ITEM_CART:
+            let i=0
+            for(i=0;i<state.length;i++){
+                if(state[i].id===payload.id)
+                break
+            }
+            return state.slice(0,i).concat(state.slice(i+1))
+            break;
         default:
             return state
     }

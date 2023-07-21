@@ -27,3 +27,10 @@ export const addcartitem=(item)=>{
         payload:item
     }
 }
+
+export const removeitemcart=(item)=>{
+    return {
+        type:ActionTypes.REMOVE_ITEM_CART,
+        payload:item
+    }
+}

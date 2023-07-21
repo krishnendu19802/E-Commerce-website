@@ -70,7 +70,7 @@ export default function Indvproduct() {
    
    dispatch(addcartitem({...product,quantity:count}))
  }
- console.log(cart)
+//  console.log(cart)
   // boxShadow: "4px 0 4px rgba(0, 0, 0, 0.1) "
   return (
     <>
