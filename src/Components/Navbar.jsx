@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
 import { cart_icon } from '../assets/Icons'
 import { Link, Navigate, useParams } from 'react-router-dom'
+import ModalSignUp from './ModalSignUp'
+import ModalLogIn from './ModalLogIn'
 
 export default function Navbar() {
-  const [cat,setCat]=useState('Categories')
-  
+  const [cat, setCat] = useState('Categories')
+
   return (
     <div>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid">
-          <Link className="navbar-brand" onClick={()=>{moveto("")}}>MyShop</Link>
+          <Link className="navbar-brand" to="/">MyShop</Link>
           <div className="dropdown me-auto">
             <button className="btn  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               {/* {props.category===""?"Categories":params} */}
@@ -21,11 +23,13 @@ export default function Navbar() {
               <li><Link className="dropdown-item" to="/mensclothing">Men's clothing</Link></li><hr />
               <li><Link className="dropdown-item" to="/womensclothing">Women's clothing</Link></li>
 
-             
+
             </ul>
           </div>
-          <div className="nav-items">
-            <button className="btn btn-success mx-2">Sign In</button>
+          <div className="nav-items d-flex">
+            <ModalSignUp/>
+            <ModalLogIn/>
+            
             <button className="btn btn-success">Sign Search</button>
             <Link to='/cartpage' style={{ textDecoration: 'none' }}>
               <button className="btn btn-primary mx-2 text-light">
