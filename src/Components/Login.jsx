@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 // import icons from './Icons'
 import { user_icons } from '../assets/Icons'
+import { Link } from 'react-router-dom'
 
 export default function Login(props) {
     const [user, setUser] = useState({
@@ -89,7 +90,7 @@ export default function Login(props) {
 
                 </div>
                 <div className=" mx-5 d-flex justify-content-end">
-                    <a href="/" style={{ textDecoration: 'none' }}>Forgot password?</a>
+                    <Link href="/" style={{ textDecoration: 'none' }}>Forgot password?</Link>
                 </div>
 
                 <div className=" mx-5 d-flex justify-content-center align-items-center">

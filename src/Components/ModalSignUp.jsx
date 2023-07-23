@@ -5,7 +5,7 @@ import Register from "./Register"
 
 
 export default function ModalSignUp() {
-    
+
     return (
         <div>
             <button type="button" className="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#exampleModal-1">
@@ -19,12 +19,13 @@ export default function ModalSignUp() {
                             <button type="button" className="btn-close ms-auto ps-5" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
-                          <Register/>
+                            <Register />
                         </div>
                         {/* <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="button" className="btn btn-primary">Save changes</button>
                         </div> */}
+                        
                     </div>
                 </div>
             </div>
