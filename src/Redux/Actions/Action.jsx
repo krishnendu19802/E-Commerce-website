@@ -6,6 +6,11 @@ export const setlist=(list)=>{
         payload:list
     }
 }
+export const removelist=()=>{
+    return {
+        type:ActionTypes.REMOVE_LIST
+    }
+}
 
 export const selectitem=(item)=>{
     return {

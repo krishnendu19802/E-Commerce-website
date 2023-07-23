@@ -1,19 +1,33 @@
 import axios from 'axios'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setlist } from '../Redux/Actions/Action'
+import { addcartitem, removelist, setlist } from '../Redux/Actions/Action'
 import { stars } from '../assets/Icons'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 // import { setlist } from '../Redux/Reducers/MainReducers'
 
-export default function Productlist() {
+export default function Productlist(props) {
 
     const dispatch = useDispatch()
     const product_list = useSelector((state) => state.list)
+    const param=useParams()
+    // console.log(param)
+    // const product=useSelector((state)=>)
     const fetch_details_setlist = async () => {
-        const response = await axios.get('https://fakestoreapi.com/products').catch((err) => {
+        let response = await axios.get(`https://fakestoreapi.com/products${props.category!==""?`/category/${props.category}`:''}`).catch((err) => {
             console.log("erro: ", err)
         })
+        // let response
+        // if(props.category===''){
+        //     response = await axios.get('https://fakestoreapi.com/products').catch((err) => {
+        //     console.log("erro: ", err)
+        // })
+        // }
+        // else{
+        //     response = await axios.get(`'https://fakestoreapi.com/products/category/jewelery`).catch((err) => {
+        //     console.log("erro: ", err)
+        // })
+        // }
         // console.log(response.data)
         // dispatch(setlist(["hello","hi"]))
 
@@ -22,7 +36,10 @@ export default function Productlist() {
     }
     useEffect(() => {
         fetch_details_setlist()
-    }, [])
+        return ()=>{
+            dispatch(removelist())
+        }
+    },[param])
 
     const contstars = (val) => {
         let list = []
@@ -38,16 +55,21 @@ export default function Productlist() {
         return list
     }
     // ${item.id}
+    const handleclick=(item)=>{
+        // event.stop
+       dispatch(addcartitem({...item,quantity:1}))
+    }
 
-    console.log(product_list)
+    // console.log(product_list)
     let display_list = []
+    const disp=()=>{
     if (product_list.length > 0) {
         display_list = product_list.map((item) => {
             return (
                 // {/* <div > */}
                 <div className="my-3 col-4">
                     <Link to={`/product/${item.id}`} style={{ textDecoration: 'none' }} >
-                        <div className="card  px-0  " key={item.id} style={{ height: '350px' }} >
+                        <div className="card  px-0  " key={item.id} style={{ height: '400px' }} >
                             <div className="d-flex justify-content-center px-2 py-2" style={{ width: "100%", height: "50%", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1) " }}>
 
                                 <img src={item.image} className="card-img-top" alt="..." width="70%" height="80%" />
@@ -59,8 +81,14 @@ export default function Productlist() {
 
                                     <p className="card-text">({item.rating.count})</p>
                                 </div>
+                                <div className="price d-flex">
+                                    <h5>${item.price}</h5>
+                                </div>
 
-                                <button className="btn btn-primary">Add to Cart</button>
+                                <button className="btn btn-primary" onClick={(event)=>{
+                                    // event.stopPropagation();
+                                    event.preventDefault()
+                                    handleclick(item)}}>Add to Cart</button>
                             </div>
                             {/* </div> */}
                         </div>
@@ -68,12 +96,13 @@ export default function Productlist() {
                 </div>
             )
         })
+        return display_list}
     }
 
 
     return (
         <div className='my-2 ms-5 row ' style={{ width: '80%' }}>
-            {display_list}
+            {disp()}
         </div>
     )
 }

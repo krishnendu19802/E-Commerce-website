@@ -4,6 +4,10 @@ export const set_item_list=(state=[],actions)=>{
     switch (actions.type) {
         case ActionTypes.SETLIST:
          return [...actions.payload]
+         break
+         case ActionTypes.REMOVE_LIST:
+            return []
+            break
     
         default:
            return state

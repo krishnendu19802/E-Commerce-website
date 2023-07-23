@@ -4,8 +4,9 @@ import { stars, trash } from '../assets/Icons'
 import { removeitemcart } from '../Redux/Actions/Action'
 
 export default function Cartpage() {
-    const dispatch=useDispatch()
-    
+    const dispatch = useDispatch()
+    let total = 0
+
     const contstars = (val) => {
         let list = []
         for (let i = 0; i < 5; i++) {
@@ -19,15 +20,16 @@ export default function Cartpage() {
         }
         return list
     }
-    const remove=(item)=>{
+    const remove = (item) => {
         dispatch(removeitemcart(item))
     }
-    
+
 
     const cart_items = useSelector((state) => state.cartitems)
     console.log(cart_items)
     const displayitem = () => {
         return cart_items.map((item) => {
+            total += item.quantity * item.price
             return (
                 <div className='my-2 d-flex justify-content-center' >
                     <div className="content d-flex" style={{ boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1) ", width: '80%', height: '50%' }}>
@@ -39,13 +41,16 @@ export default function Cartpage() {
                             <div className="rating d-flex">
                                 <p className="me-2">{contstars(item.rating.rate)}</p>
                                 <p className="me-auto">({item.rating.count})</p>
-                                
+
+                            </div>
+                            <div className="price d-flex  py-3">
+                                <h5>${item.price}</h5>
                             </div>
                             <div className="d-flex count mb-2">
                                 <input type="number" value={item.quantity} className='me-3' />
-                                <button className="btn btn-danger d-flex align-items-center" onClick={()=>{remove(item)}}>
+                                <button className="btn btn-danger d-flex align-items-center" onClick={() => { remove(item) }}>
 
-                                {trash}
+                                    {trash}
                                 </button>
                             </div>
                             {/* <button className="btn btn-warning"></button> */}
@@ -58,6 +63,13 @@ export default function Cartpage() {
     return (
         <div className=''>
             {displayitem()}
+            <div className='my-2 d-flex justify-content-center' >
+                <h3>Total price : {total}</h3>
+            </div>
+            <div className='my-2 d-flex justify-content-center' >
+                <button className="btn btn-primary" disabled={total===0} onClick={()=>{alert('no payment option yet')}}>Pay now</button>
+            </div>
+
         </div>
     )
 }
