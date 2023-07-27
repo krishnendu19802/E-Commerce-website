@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react'
 // import icons from './Icons'
 import { user_icons } from '../assets/Icons'
+import { GoogleAuthProvider, createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
+import GoogleButton from 'react-google-button'
+import { auth } from './Firebase'
+
 
 export default function Register() {
     const [user, setUser] = useState({
-        username: "",
+        mail: "",
         password: "",
         confpassword:""
     })
@@ -27,7 +31,7 @@ export default function Register() {
         setUser(prev => { return { ...prev, [event.target.name]: event.target.value } })
     }
 
-    let handlesubmit = (event) => {
+    let handlesubmit = async(event) => {
 
         event.preventDefault()
         if (user.password.length < 8 || user.password.length >16 ) {
@@ -44,8 +48,8 @@ export default function Register() {
         for (let i = 0; i < arr.length; i++) {
             let obj = arr[i]
             // console.log(obj)
-            if (obj.username === user.username) {
-                setShow(prev=>{return {...prev,val:true,message:'username already exists'}})
+            if (obj.mail === user.mail) {
+                setShow(prev=>{return {...prev,val:true,message:'mail already exists'}})
                 return
             }
 
@@ -54,7 +58,13 @@ export default function Register() {
         arr.push(user)
         console.log(arr)
         // localStorage.setItem("userdetails",JSON.stringify(arr))
-        setShow(prev=>{return {...prev,val:true,bg:'success',message:'Registered successfully'}})
+        try {
+            await createUserWithEmailAndPassword(auth,user.mail,user.password)
+            setShow(prev=>{return {...prev,val:true,bg:'success',message:'Registered successfully'}})
+        } catch (error) {
+            setShow(prev=>{return {...prev,val:true,message:'Some error occured'}})
+            
+        }
 // 12345678
     }
     // user_icons
@@ -65,6 +75,20 @@ useEffect(()=>{
         }, 1000);
     }
 },[show])
+
+  const handlegooglesubmit=async()=>{
+     const googleAuthProvider=new GoogleAuthProvider()
+     try {
+         await signInWithPopup(auth,googleAuthProvider)
+         setShow(prev=>{return {...prev,val:true,bg:'success',message:'Registered successfully'}})
+
+        
+     } catch (error) {
+        setShow(prev=>{return {...prev,val:true,message:'Some error occured'}})
+        
+     }
+     
+  }
   return (
     <div>
       <form onSubmit={handlesubmit} >
@@ -78,13 +102,13 @@ useEffect(()=>{
 
 
                 <div className="d-flex justify-content-center align-items-center my-3 fs-5">
-                    <label htmlFor="username" className=' rounded-start-5 d-flex justify-content-center align-items-center' style={{ ...st, width: '40px' }}>{user_icons.username}</label>
-                    <input type="text" id="username" className='rounded-5' placeholder='Username' style={{ ...st, width: '70%' }} name='username' value={user.username} onChange={handledata} required />
+                    <label htmlFor="mail" className=' rounded-start-5 d-flex justify-content-center align-items-center' style={{ ...st, width: '40px' }}>{user_icons.mail}</label>
+                    <input type="email" id="mail" className='rounded-5' placeholder='mail' style={{ ...st, width: '70%' }} name='mail' value={user.mail} onChange={handledata} required />
 
                 </div>
 
                 <div className="d-flex  justify-content-center align-items-center my-3 fs-5">
-                    <label htmlFor="username" className=' rounded-start-5 d-flex justify-content-center align-items-center' style={{ ...st, width: '40px' }}>{user_icons.password}</label>
+                    <label htmlFor="mail" className=' rounded-start-5 d-flex justify-content-center align-items-center' style={{ ...st, width: '40px' }}>{user_icons.password}</label>
                     <input type="password" id="password" className={`${(active === 'password' && user.password.length < 8 || user.password.length>16) ? 'border border-danger border-5' : ''} rounded-5`} placeholder='password' style={{ ...st, width: '70%' }} name="password" value={user.password} onChange={handledata} required />
 
                 </div>
@@ -98,6 +122,11 @@ useEffect(()=>{
 
                 <div className=" mx-5 d-flex justify-content-center align-items-center">
                     <button className="btn btn-success btn-large">Submit</button>
+                </div>
+                <hr />
+                <div className=" mx-5 d-flex justify-content-center align-items-center">
+                    <GoogleButton className='my-2' onClick={handlegooglesubmit}></GoogleButton>
+
                 </div>
             </form>
     </div>
