@@ -1,12 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { stars, trash } from '../assets/Icons'
 import { removeitemcart } from '../Redux/Actions/Action'
+import { getDatabase, onValue, ref,set,remove } from 'firebase/database'
+// import {firebase} from 'firebase/app'
+import { app } from './Firebase'
+import { useAuth0 } from '@auth0/auth0-react'
+
 
 export default function Cartpage() {
+    const { user, isAuthenticated } = useAuth0()
+    console.log(isAuthenticated)
     const dispatch = useDispatch()
     let total = 0
-
+    const [cart_items, setcart_items] = useState([])
     const contstars = (val) => {
         let list = []
         for (let i = 0; i < 5; i++) {
@@ -20,13 +27,72 @@ export default function Cartpage() {
         }
         return list
     }
-    const remove = (item) => {
-        dispatch(removeitemcart(item))
+    const removeitem = (item) => {
+        const db = getDatabase(app)
+        // dispatch(removeitemcart(item))
+        // admin.ref(`users/${user.name}/${item.id}`).remove()
+        
+        let arr=Object.values(data)
+        
+        arr=arr.filter((it)=>it!==item)
+        console.log(arr)
+        // const userref=`users/${user.name}/${item.id}`
+        // userref.remove().then(()=>{console.log("item removed")}).catch(()=>{
+        //     console.log("some error occured")
+        // })
+        set(ref(db,`users/${user.name}/${item.id}`),null)
+       getmydata()
+        
+        
+
     }
 
+    let arr = []
+    const [data,setData]=useState('')
+    const getmydata =  () => {
+        const db = getDatabase(app)
 
-    const cart_items = useSelector((state) => state.cartitems)
-    console.log(cart_items)
+        if (isAuthenticated === true) {
+            const starCountRef = ref(db, `users/${user.name}`);
+             onValue(starCountRef, (snapshot) => {
+
+                // data = snapshot.val()
+                setData(snapshot.val())
+
+            });
+
+        }
+        console.log(data)
+       
+    }
+    // console.log(typeof(data))
+    useEffect(() => {
+        const fetchObjectData = async () => {
+            try {
+                if(data===null){
+                    console.log("null value received")
+                    setcart_items([])
+                    return
+                }
+                const dataArray = Object.values(data);
+
+                // Update the state with the new array
+                if(dataArray!==null)
+                setcart_items(dataArray);
+                else
+                setcart_items([])
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchObjectData();
+    }, [data])
+    useEffect(()=>{getmydata()},[])
+
+
+    // const cart_items = useSelector((state) => state.cartitems)
+    // console.log(cart_items)
     const displayitem = () => {
         return cart_items.map((item) => {
             total += item.quantity * item.price
@@ -48,7 +114,7 @@ export default function Cartpage() {
                             </div>
                             <div className="d-flex count mb-2">
                                 <input type="number" value={item.quantity} className='me-3' />
-                                <button className="btn btn-danger d-flex align-items-center" onClick={() => { remove(item) }}>
+                                <button className="btn btn-danger d-flex align-items-center" onClick={() => { removeitem(item) }}>
 
                                     {trash}
                                 </button>
@@ -67,7 +133,7 @@ export default function Cartpage() {
                 <h3>Total price : {total}</h3>
             </div>
             <div className='my-2 d-flex justify-content-center' >
-                <button className="btn btn-primary" disabled={total===0} onClick={()=>{alert('no payment option yet')}}>Pay now</button>
+                <button className="btn btn-primary" disabled={total === 0} onClick={() => { alert('no payment option yet') }}>Pay now</button>
             </div>
 
         </div>

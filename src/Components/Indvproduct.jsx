@@ -5,9 +5,13 @@ import { addcartitem, removeselectitem, selectitem } from '../Redux/Actions/Acti
 import axios from 'axios'
 import { stars } from '../assets/Icons'
 import { cart_items } from '../Redux/Reducers/MainReducers'
+import { getDatabase, ref, set } from 'firebase/database'
+import { useAuth0 } from '@auth0/auth0-react'
+import { app } from './Firebase'
 
 export default function Indvproduct() {
   const page = useParams().productId
+  const {user,isAuthenticated}=useAuth0()
   // console.log(page)
   const dispatch = useDispatch()
   const product = useSelector((state) => state.product)
@@ -67,10 +71,19 @@ export default function Indvproduct() {
     //  addtocart()
   }
   const [show, setShow] = useState('')
-  const addtocart = () => {
-    setShow('show')
+  const addtocart = (event) => {
     // console.log('added to cart')
-    dispatch(addcartitem({ ...product, quantity: count }))
+    // dispatch(addcartitem({ ...product, quantity: count }))
+    event.preventDefault()
+    if (isAuthenticated === false)
+    alert("You need to sign in first");
+  else {
+    const db = getDatabase(app)
+    
+    set(ref(db, `users/${user.name}/${product.id}`), { ...product, quantity: count })
+    // handleclick(item)
+    setShow('show')
+    }
   }
 
   useEffect(() => {
@@ -80,7 +93,7 @@ export default function Indvproduct() {
     }, 1500);
   }, [show])
 
-  
+
 
   //  console.log(cart)
   // boxShadow: "4px 0 4px rgba(0, 0, 0, 0.1) "
@@ -91,7 +104,7 @@ export default function Indvproduct() {
         <div>
           {/* {alertmess} */}
           <div className={`alert alert-success alert-dismissible fade ${show}`} role="alert">
-            <strong>Added {count } items to the cart!</strong>
+            <strong>Added {count} items to the cart!</strong>
             <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
           <div className="total_page d-flex my-3" style={{ width: '90%', boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.1) " }}>
@@ -119,7 +132,7 @@ export default function Indvproduct() {
                   <button className="btn btn-lg  btn-primary mx-2 my-2" onClick={() => { updatecount(1) }}>+</button>
                 </div>
                 }
-                <button className="btn btn-warning" onClick={() => { count === 0 ? updatecount(2) : addtocart() }} style={{ width: '40%' }}>Add to cart</button>
+                <button className="btn btn-warning" onClick={(event) => { count === 0 ? updatecount(2) : addtocart(event) }} style={{ width: '40%' }}>Add to cart</button>
               </div>
 
             </div>

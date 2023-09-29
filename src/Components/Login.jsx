@@ -8,7 +8,7 @@ import {
     GoogleAuthProvider,
     signInWithPopup
 } from 'firebase/auth'
-import { auth } from './Firebase'
+// import { auth } from './Firebase'
 
 
 export default function Login(props) {

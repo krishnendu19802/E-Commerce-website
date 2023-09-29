@@ -4,13 +4,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addcartitem, removelist, setlist } from '../Redux/Actions/Action'
 import { stars } from '../assets/Icons'
 import { Link, useParams } from 'react-router-dom'
+import { useAuth0 } from '@auth0/auth0-react'
+import { app } from './Firebase'
+import {ref,getDatabase,set, onValue} from 'firebase/database'
 // import { setlist } from '../Redux/Reducers/MainReducers'
 
 export default function Productlist(props) {
-
     const dispatch = useDispatch()
     const product_list = useSelector((state) => state.list)
     const param=useParams()
+    const {user,isAuthenticated}=useAuth0()
     // console.log(param)
     // const product=useSelector((state)=>)
     const fetch_details_setlist = async () => {
@@ -34,6 +37,7 @@ export default function Productlist(props) {
         dispatch(setlist(response.data))
 
     }
+    console.log(isAuthenticated+"from productlist")
     useEffect(() => {
         fetch_details_setlist()
         return ()=>{
@@ -88,7 +92,15 @@ export default function Productlist(props) {
                                 <button className="btn btn-primary" onClick={(event)=>{
                                     // event.stopPropagation();
                                     event.preventDefault()
-                                    handleclick(item)}}>Add to Cart</button>
+                                    if(isAuthenticated===false)
+                                    alert("You need to sign in first");
+                                    else
+                                    { 
+                                        const db=getDatabase(app)
+                                        
+                                        set(ref(db,`users/${user.name}/${item.id}`),{...item,quantity:1})
+                                        // handleclick(item)
+                                    }}}>Add to Cart</button>
                             </div>
                             {/* </div> */}
                         </div>

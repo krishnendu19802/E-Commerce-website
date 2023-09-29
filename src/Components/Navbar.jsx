@@ -3,10 +3,20 @@ import { cart_icon } from '../assets/Icons'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import ModalSignUp from './ModalSignUp'
 import ModalLogIn from './ModalLogIn'
-
+import { useAuth0 } from '@auth0/auth0-react'
+  
 export default function Navbar() {
   const [cat, setCat] = useState('Categories')
-
+   
+  const {user, isAuthenticated, isLoading, loginWithRedirect,logout } = useAuth0();
+  const login=()=>{
+    // alert("clicked")
+    loginWithRedirect()
+  }
+  const logo=()=>{
+    logout({ logoutParams: { returnTo: window.location.origin } })
+  }
+  // console.log(user)
   return (
     <div>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -27,10 +37,17 @@ export default function Navbar() {
             </ul>
           </div>
           <div className="nav-items d-flex">
-            <ModalSignUp/>
-            <ModalLogIn/>
+            {/* <ModalSignUp/> */}
+            {/* <ModalLogIn/> */}
+            {isAuthenticated && 
+               <div className='text-success my-2 '>{user.name}</div>
+            }
+            {!isAuthenticated && <button className="btn btn-primary mx-2" onClick={()=>{login()}}>Log In</button> }
             
-            <button className="btn btn-success">Sign Search</button>
+            {isAuthenticated && <button className="btn btn-primary mx-2" onClick={()=>{logo()}}>Log Out</button> }
+            
+            
+            {/* <button className="btn btn-success">Sign Search</button> */}
             <Link to='/cartpage' style={{ textDecoration: 'none' }}>
               <button className="btn btn-primary mx-2 text-light">
                 {cart_icon}

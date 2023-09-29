@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { user_icons } from '../assets/Icons'
 import { GoogleAuthProvider, createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
 import GoogleButton from 'react-google-button'
-import { auth } from './Firebase'
+// import { auth } from './Firebase'
 
 
 export default function Register() {
