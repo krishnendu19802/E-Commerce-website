@@ -8,7 +8,7 @@ import { app } from './Firebase'
 import { useAuth0 } from '@auth0/auth0-react'
 
 
-export default function Cartpage() {
+export default function Cartpage({size}) {
     const { user, isAuthenticated } = useAuth0()
     console.log(isAuthenticated)
     const dispatch = useDispatch()
@@ -97,10 +97,10 @@ export default function Cartpage() {
         return cart_items.map((item) => {
             total += item.quantity * item.price
             return (
-                <div className='my-2 d-flex justify-content-center' >
-                    <div className="content d-flex" style={{ boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1) ", width: '80%', height: '50%' }}>
-                        <div className="image_part px-5 pb-2" style={{ width: '30%' }}>
-                            <img src={item.image} alt="..." width='30%' height='100%' />
+                <div className='mt-5 d-flex justify-content-center' >
+                    <div className="content d-flex" style={{ boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1) ", width: '80%', height: `${size.height/40}rem` }}>
+                        <div className="image_part px-5 pb-2 d-flex justify-content-center align-items-center" style={{ maxWidth: '50%' }}>
+                            <img src={item.image} alt="..." width='100%' height='40%' />
                         </div>
                         <div className="text_part mx-2">
                             <h4>{item.title}</h4>
