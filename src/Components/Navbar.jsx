@@ -45,7 +45,7 @@ export default function Navbar() {
     <div className='d-flex'>
       <nav className="navbar navbar-expand-lg bg-body-tertiary fixed-top mb-2">
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/">MyShop</Link>
+          <Link className="navbar-brand" to="/">KShop</Link>
           {isAuthenticated && windowSize.width <= 992 &&
             <div className='text-success my-2 m-auto '>{user.name}</div>
           }
