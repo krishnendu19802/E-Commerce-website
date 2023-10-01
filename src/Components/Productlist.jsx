@@ -37,7 +37,7 @@ export default function Productlist(props) {
         dispatch(setlist(response.data))
 
     }
-    console.log(isAuthenticated + "from productlist")
+    // console.log(isAuthenticated + "from productlist")
     useEffect(() => {
         fetch_details_setlist()
         return () => {
