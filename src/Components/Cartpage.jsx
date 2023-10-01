@@ -90,14 +90,14 @@ export default function Cartpage({ size }) {
     }, [data])
     useEffect(() => { getmydata() }, [])
 
-
+    
     // const cart_items = useSelector((state) => state.cartitems)
     // console.log(cart_items)
     const displayitem = () => {
         return cart_items.map((item) => {
             total += item.quantity * item.price
             return (
-                <div className='mt-5 prod-class d-flex justify-content-center' >
+                <div className=' contanier mt-5 prod-class d-flex justify-content-center'  >
                     <div className="content d-flex" style={{ boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1) ", width: '80%', height: `${size.height / 40}rem` }}>
                         <div className="image_part px-5 pb-2 d-flex justify-content-center align-items-center" style={{ maxWidth: '50%' }}>
                             <img src={item.image} alt="..." width='100%' height='40%' />
@@ -109,12 +109,12 @@ export default function Cartpage({ size }) {
                                 <p className="me-auto">({item.rating.count})</p>
 
                             </div>
-                            <div className="price d-flex  py-3">
+                            <div className="price d-flex  py-1">
                                 <h5>${item.price}</h5>
                             </div>
-                            <div className="d-flex count mb-2">
-                                <input type="number" value={item.quantity} className='me-3' />
-                                <button className="btn btn-danger d-flex align-items-center" onClick={() => { removeitem(item) }}>
+                            <div className={`${size.width>450?'d-flex':''} count mb-2`}>
+                                <input type="number" value={item.quantity} className='me-3'style={{width:'40%'}} />
+                                <button className={`btn btn-danger d-flex align-items-center ${size.width<450?'my-2':''}`} onClick={() => { removeitem(item) }}>
 
                                     {trash}
                                 </button>
