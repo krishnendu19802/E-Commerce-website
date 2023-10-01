@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addcartitem, removelist, setlist } from '../Redux/Actions/Action'
 import { stars } from '../assets/Icons'
@@ -72,8 +72,9 @@ export default function Productlist(props) {
                 return (
                     // {/* <div > */}
 
-                    <div className="my-3  col-lg-4 col-sm-12 col-md-6 ">
+                    <div className="my-3 prod-class  col-lg-4 col-sm-12 col-md-6 " >
                         <Link to={`/product/${item.id}`} style={{ textDecoration: 'none' }} >
+
                             <div className="card  px-0  " key={item.id} style={{ height: '400px' }} >
                                 <div className="d-flex justify-content-center px-2 py-2 " style={{ width: "100%", height: "50%", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1) " }}>
 
@@ -99,8 +100,10 @@ export default function Productlist(props) {
                                             const db = getDatabase(app)
 
                                             set(ref(db, `users/${user.name}/${item.id}`), { ...item, quantity: 1 })
+                                            setShow('show')
                                             // handleclick(item)
                                         }
+                                        
                                     }}>Add to Cart</button>
                                 </div>
                                 {/* </div> */}
@@ -113,13 +116,24 @@ export default function Productlist(props) {
             return display_list
         }
     }
+    const [show, setShow] = useState('')
 
+    useEffect(() => {
+        setTimeout(() => {
+
+            setShow('')
+        }, 1500);
+    }, [show])
 
     return (
         <div className="whole d-flex justify-content-center" style={{ width: '100%' }}>
             <div className=' row ' style={{ width: '80%' }}>
+                <div className={`alert alert-success alert-dismissible fixed-top fade ${show}`} role="alert">
+                    <strong>Added 1 item to the cart!</strong>
+                    <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
                 {disp()}
-                
+
             </div>
         </div>
     )

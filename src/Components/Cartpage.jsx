@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { stars, trash } from '../assets/Icons'
 import { removeitemcart } from '../Redux/Actions/Action'
-import { getDatabase, onValue, ref,set,remove } from 'firebase/database'
+import { getDatabase, onValue, ref, set, remove } from 'firebase/database'
 // import {firebase} from 'firebase/app'
 import { app } from './Firebase'
 import { useAuth0 } from '@auth0/auth0-react'
 
 
-export default function Cartpage({size}) {
+export default function Cartpage({ size }) {
     const { user, isAuthenticated } = useAuth0()
     console.log(isAuthenticated)
     const dispatch = useDispatch()
@@ -31,30 +31,30 @@ export default function Cartpage({size}) {
         const db = getDatabase(app)
         // dispatch(removeitemcart(item))
         // admin.ref(`users/${user.name}/${item.id}`).remove()
-        
-        let arr=Object.values(data)
-        
-        arr=arr.filter((it)=>it!==item)
+
+        let arr = Object.values(data)
+
+        arr = arr.filter((it) => it !== item)
         console.log(arr)
         // const userref=`users/${user.name}/${item.id}`
         // userref.remove().then(()=>{console.log("item removed")}).catch(()=>{
         //     console.log("some error occured")
         // })
-        set(ref(db,`users/${user.name}/${item.id}`),null)
-       getmydata()
-        
-        
+        set(ref(db, `users/${user.name}/${item.id}`), null)
+        getmydata()
+
+
 
     }
 
     let arr = []
-    const [data,setData]=useState('')
-    const getmydata =  () => {
+    const [data, setData] = useState('')
+    const getmydata = () => {
         const db = getDatabase(app)
 
         if (isAuthenticated === true) {
             const starCountRef = ref(db, `users/${user.name}`);
-             onValue(starCountRef, (snapshot) => {
+            onValue(starCountRef, (snapshot) => {
 
                 // data = snapshot.val()
                 setData(snapshot.val())
@@ -63,13 +63,13 @@ export default function Cartpage({size}) {
 
         }
         console.log(data)
-       
+
     }
     // console.log(typeof(data))
     useEffect(() => {
         const fetchObjectData = async () => {
             try {
-                if(data===null){
+                if (data === null) {
                     console.log("null value received")
                     setcart_items([])
                     return
@@ -77,10 +77,10 @@ export default function Cartpage({size}) {
                 const dataArray = Object.values(data);
 
                 // Update the state with the new array
-                if(dataArray!==null)
-                setcart_items(dataArray);
+                if (dataArray !== null)
+                    setcart_items(dataArray);
                 else
-                setcart_items([])
+                    setcart_items([])
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -88,7 +88,7 @@ export default function Cartpage({size}) {
 
         fetchObjectData();
     }, [data])
-    useEffect(()=>{getmydata()},[])
+    useEffect(() => { getmydata() }, [])
 
 
     // const cart_items = useSelector((state) => state.cartitems)
@@ -97,8 +97,8 @@ export default function Cartpage({size}) {
         return cart_items.map((item) => {
             total += item.quantity * item.price
             return (
-                <div className='mt-5 d-flex justify-content-center' >
-                    <div className="content d-flex" style={{ boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1) ", width: '80%', height: `${size.height/40}rem` }}>
+                <div className='mt-5 prod-class d-flex justify-content-center' >
+                    <div className="content d-flex" style={{ boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1) ", width: '80%', height: `${size.height / 40}rem` }}>
                         <div className="image_part px-5 pb-2 d-flex justify-content-center align-items-center" style={{ maxWidth: '50%' }}>
                             <img src={item.image} alt="..." width='100%' height='40%' />
                         </div>
@@ -126,14 +126,23 @@ export default function Cartpage({size}) {
             )
         })
     }
+
+    const clearcart = () => {
+        const db = getDatabase(app)
+        set(ref(db, `users/${user.name}`), null)
+        getmydata()
+    }
     return (
         <div className=''>
             {displayitem()}
-            <div className='my-2 d-flex justify-content-center' >
-                <h3>Total price : {total}</h3>
+            <div className='my-2 mt-5 d-flex justify-content-center' >
+                <h3>Total price : ${total}</h3>
+                <div className='mx-4 d-flex justify-content-center' >
+                    <button className="btn btn-primary" disabled={total === 0} onClick={() => { alert('no payment option yet') }}>Pay now</button>
+                </div>
             </div>
-            <div className='my-2 d-flex justify-content-center' >
-                <button className="btn btn-primary" disabled={total === 0} onClick={() => { alert('no payment option yet') }}>Pay now</button>
+            <div className="my-2 d-flex justify-content-center">
+                <button className="btn btn-danger" disabled={total === 0} onClick={() => { clearcart() }}>Empty Cart</button>
             </div>
 
         </div>

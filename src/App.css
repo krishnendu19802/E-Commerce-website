@@ -1,3 +1,13 @@
 /* Link{
     text-decoration: none;
 } */
+.card{
+    background: transparent;
+
+}
+.prod-class{
+    transition: transform 0.5s;
+}
+.prod-class:hover{
+    transform: scale(1.1);
+}

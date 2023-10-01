@@ -104,7 +104,7 @@ export default function Indvproduct({size}) {
           <div>...Loading</div> :
           <div >
             {/* {alertmess} */}
-            <div className={`alert alert-success alert-dismissible fade ${show}`} role="alert">
+            <div className={`alert alert-success alert-dismissible  fade ${show}`} role="alert">
               <strong>Added {count} items to the cart!</strong>
               <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>

@@ -43,14 +43,14 @@ function App() {
       window.removeEventListener('resize', updateWindowSize);
     };
   }, []);
-
+  document.body.style.backgroundImage='linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)'
   return (
     <>
       <BrowserRouter>
         <div>
           
           <Navbar />
-          <div className="container mt-5" style={{ width: '100%' }}>
+          <div className="container " style={{ width: '100%',marginTop:'80px' }}>
             <Routes>
               <Route exact path="/" element={<Productlist category={''} />}></Route>
               <Route exact path="/product/:productId" element={<Indvproduct size={windowSize} />}></Route>
